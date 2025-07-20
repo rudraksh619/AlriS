@@ -1,11 +1,10 @@
-
-
+import { Button } from "@/components/ui/button";
 export default function Home() {
 
   return(
-    <div className="text-2xl text-green-200">
-      Hello
-    </div>
+   <Button variant= "custom"> 
+    Hello
+   </Button>
   )
 
 }
