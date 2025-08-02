@@ -18,20 +18,16 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaGithub , FaGoogle } from "react-icons/fa";
-
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1, { message: "password is required" }),
 });
 
-
-
 export const SignInView = () => {
-
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
@@ -53,13 +49,12 @@ export const SignInView = () => {
       {
         email: data.email,
         password: data.password,
-        callbackURL : "/"
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setispending(false);
           router.push("/");
-         
         },
 
         onError: ({ error }) => {
@@ -77,12 +72,11 @@ export const SignInView = () => {
     authClient.signIn.social(
       {
         provider: provider,
-        callbackURL : "/"
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setispending(false);
-        
         },
 
         onError: ({ error }) => {
@@ -173,22 +167,22 @@ export const SignInView = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <Button
                     disabled={ispending}
-                    onClick={() =>  onSocial("google") }
+                    onClick={() => onSocial("google")}
                     variant="outline"
                     type="button"
                     className="w-full"
                   >
-                  <FaGoogle/>
+                    <FaGoogle />
                   </Button>
 
                   <Button
                     disabled={ispending}
-                      onClick={() =>  onSocial("github") }
+                    onClick={() => onSocial("github")}
                     variant="outline"
                     type="button"
                     className="w-full"
                   >
-                    <FaGithub/>
+                    <FaGithub />
                   </Button>
                 </div>
 
@@ -206,11 +200,11 @@ export const SignInView = () => {
           </Form>
 
           <div
-            className="bg-radial from-green-700 to-green-900
+            className="bg-radial from-sidebar-accent to-sidebar
                           relative hidden md:flex flex-col gap-y-4 justify-center items-center p-3"
           >
             <img
-              src="/logo.svg"
+              src="/logo.png"
               alt="logo image"
               className="h-[92px] w-[92px]"
             />

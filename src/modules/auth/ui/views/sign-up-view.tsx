@@ -18,7 +18,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { FaGithub , FaGoogle } from "react-icons/fa";
@@ -257,11 +257,11 @@ export const SignUpView = () => {
           </Form>
 
           <div
-            className="bg-radial from-green-700 to-green-900
+            className="bg-radial from-sidebar-accent to-sidebar
                           relative hidden md:flex flex-col gap-y-4 justify-center items-center p-3"
           >
             <img
-              src="/logo.svg"
+              src="/logo.png"
               alt="logo image"
               className="h-[92px] w-[92px]"
             />
