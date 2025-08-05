@@ -17,7 +17,7 @@ export const DashboardNavbar = () => {
     const down = (e:KeyboardEvent)=>{
       if(e.key === "k" || e.metaKey){
         e.preventDefault();
-        setCommandOpen(true);
+        setCommandOpen((open)=>!open);
       }
     }
 
