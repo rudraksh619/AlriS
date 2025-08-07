@@ -89,6 +89,7 @@ export const DashboardUserButton = () => {
           onClick={Logout}>
             Logout
             <LogOut className="size-4 text-black" />
+            
           </Button>
 
         </DrawerFooter>
