@@ -1,6 +1,6 @@
 "use client";
 
-import { email, z } from "zod";
+import {  z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
