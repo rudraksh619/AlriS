@@ -27,7 +27,7 @@ interface AgentFormProps {
   intialsValues: AgentGetOne;
 }
 
-export const AgentForm = ({
+export const  AgentForm = ({
   onSuccess,
   onCancel,
   intialsValues,
@@ -41,7 +41,7 @@ export const AgentForm = ({
     trpc.agents.create.mutationOptions({
       onSuccess: async () => {
        await queryClient.invalidateQueries(
-            trpc.agents.getMany.queryOptions(),
+            trpc.agents.getMany.queryOptions({}),
 
         );
 
