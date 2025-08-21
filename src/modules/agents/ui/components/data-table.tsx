@@ -17,14 +17,14 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
-  onRowClicik ?: (row : TData) => void
+  onRowClick ?: (row : TData) => void
 
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  onRowClicik
+  onRowClick
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -43,7 +43,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className = "cursor-pointer bg-background"
-                onClick={()=>onRowClicik?.(row.original)}
+                onClick={()=>onRowClick?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}
