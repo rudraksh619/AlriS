@@ -2,11 +2,24 @@
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { AgentIdHeader } from "../components/agent-id-view-header";
 import { GenrateAvatar } from "@/components/generated-avatar";
 import { Badge } from "@/components/ui/badge";
 import { VideoIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { error } from "zod/v4/locales/ar.js";
+import { TRPCError } from "@trpc/server";
+import { useConfirm } from "@/hooks/use-confirm";
+import { agents } from "@/db/schema";
+import { useState } from "react";
+
+import { UpdateAgentDialog } from "../components/update-agent-dialog";
 
 interface Props {
   agentId: string;
@@ -14,23 +27,69 @@ interface Props {
 
 export const AgentIdView = ({ agentId }: Props) => {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(
     trpc.agents.getOne.queryOptions({ id: agentId })
   );
 
+  const router = useRouter();
+
+  const[updateAgentIdDialog,setupdateAgentDiallog] = useState(false);
+
+
+  const removeAgent = useMutation(
+    trpc.agents.remove.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.agents.getMany.queryOptions({})
+        );
+
+        router.push("/agents");
+      },
+
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
+  const[RemoveConfimation , confirmRemove] = useConfirm(
+    "Are you sure?",
+    `The following action will remove ${data.meetingCount} associated meetings`
+  )
+
+  const handleRemoveAgent = async()=>{
+    const ok = await confirmRemove();
+    if(!ok)
+    {
+      return ;
+    }
+    await removeAgent.mutateAsync({id:agentId})
+  }
+
   return (
+
+    <>
+
+    <RemoveConfimation/>
+
+    <UpdateAgentDialog 
+    open={updateAgentIdDialog}
+    onOpenChange={setupdateAgentDiallog}
+    initialValues = {data}
+    
+    />
+
     <div className="flex-1 flex flex-col px-4 py-4 md:px-8 gap-y-4">
       <AgentIdHeader
         agentId={agentId}
         agentName={data.name}
-        onEdit={() => {}}
-        onRemove={() => {}}
+        onEdit={() => {setupdateAgentDiallog(true)}}
+        onRemove={handleRemoveAgent}
       />
 
       <div className="bg-white rounded-lg border">
         <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5 ">
-
-
           <div className="flex items-center gap-x-3">
             <GenrateAvatar
               variant="botttsNeutral"
@@ -53,15 +112,12 @@ export const AgentIdView = ({ agentId }: Props) => {
             <p className="font-medium text-lg">Instruction</p>
             <p className="text-neutral-800">{data.instruction}</p>
           </div>
-
-
-
-
-
-
         </div>
       </div>
     </div>
+    </>
+
+    
   );
 };
 

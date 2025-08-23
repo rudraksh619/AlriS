@@ -7,4 +7,8 @@ export const AgentSchema = z.object({
     
 });
 
- 
+
+
+ export const updateAgentSchema = AgentSchema.extend({
+    id:z.string().min(1,{message : "Id is required"})
+ })

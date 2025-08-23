@@ -24,7 +24,7 @@ import { toast } from "sonner";
 interface AgentFormProps {
   onSuccess: () => void;
   onCancel: () => void;
-  intialsValues: AgentGetOne;
+  intialsValues?: AgentGetOne;
 }
 
 export const  AgentForm = ({
@@ -39,6 +39,27 @@ export const  AgentForm = ({
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
+      onSuccess: async () => {
+       await queryClient.invalidateQueries(
+            trpc.agents.getMany.queryOptions({}),
+
+        );
+
+       
+  onSuccess?.();
+      },
+
+      onError: (error) => { 
+        toast.error(error.message)
+      },
+
+    //   got to updgarde route
+
+    })
+  );
+
+const UpdateAgent = useMutation(
+    trpc.agents.update.mutationOptions({
       onSuccess: async () => {
        await queryClient.invalidateQueries(
             trpc.agents.getMany.queryOptions({}),
@@ -62,6 +83,7 @@ export const  AgentForm = ({
 
     })
   );
+  
 
   const form = useForm<z.infer<typeof AgentSchema>>({
     resolver: zodResolver(AgentSchema),
@@ -72,11 +94,11 @@ export const  AgentForm = ({
   });
 
   const isEdit = !!intialsValues?.id;
-  const isPending = createAgent.isPending;
+  const isPending = createAgent.isPending || UpdateAgent.isPending;
 
   const onSubmit = (values: z.infer<typeof AgentSchema>) => {
     if (isEdit) {
-      console.log("Update Agent");
+      UpdateAgent.mutate({...values,id:intialsValues.id})
     } else {
       createAgent.mutate(values);
     }
