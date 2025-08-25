@@ -34,8 +34,7 @@ export const AgentIdView = ({ agentId }: Props) => {
 
   const router = useRouter();
 
-  const[updateAgentIdDialog,setupdateAgentDiallog] = useState(false);
-
+  const [updateAgentIdDialog, setupdateAgentDiallog] = useState(false);
 
   const removeAgent = useMutation(
     trpc.agents.remove.mutationOptions({
@@ -53,71 +52,67 @@ export const AgentIdView = ({ agentId }: Props) => {
     })
   );
 
-  const[RemoveConfimation , confirmRemove] = useConfirm(
+  const [RemoveConfimation, confirmRemove] = useConfirm(
     "Are you sure?",
     `The following action will remove ${data.meetingCount} associated meetings`
-  )
+  );
 
-  const handleRemoveAgent = async()=>{
+  const handleRemoveAgent = async () => {
     const ok = await confirmRemove();
-    if(!ok)
-    {
-      return ;
+    if (!ok) {
+      return;
     }
-    await removeAgent.mutateAsync({id:agentId})
-  }
+    await removeAgent.mutateAsync({ id: agentId });
+  };
 
   return (
-
     <>
+      <RemoveConfimation />
 
-    <RemoveConfimation/>
-
-    <UpdateAgentDialog 
-    open={updateAgentIdDialog}
-    onOpenChange={setupdateAgentDiallog}
-    initialValues = {data}
-    
-    />
-
-    <div className="flex-1 flex flex-col px-4 py-4 md:px-8 gap-y-4">
-      <AgentIdHeader
-        agentId={agentId}
-        agentName={data.name}
-        onEdit={() => {setupdateAgentDiallog(true)}}
-        onRemove={handleRemoveAgent}
+      <UpdateAgentDialog
+        open={updateAgentIdDialog}
+        onOpenChange={setupdateAgentDiallog}
+        initialValues={data}
       />
 
-      <div className="bg-white rounded-lg border">
-        <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5 ">
-          <div className="flex items-center gap-x-3">
-            <GenrateAvatar
-              variant="botttsNeutral"
-              seed={data.name}
-              className="size-10"
-            />
-            <h2 className="text-2xl font-medium">{data.name}</h2>
-          </div>
+      <div className="flex-1 flex flex-col px-4 py-4 md:px-8 gap-y-4">
+        <AgentIdHeader
+          agentId={agentId}
+          agentName={data.name}
+          onEdit={() => {
+            setupdateAgentDiallog(true);
+          }}
+          onRemove={handleRemoveAgent}
+        />
 
-          <Badge
-            variant="outline"
-            className="flex items-center  gap-x-2 [&>svg]:size-4"
-          >
-            <VideoIcon className="text-blue-700" />
-            {data.meetingCount}{" "}
-            {data.meetingCount === 1 ? "meeting" : "meetings"}
-          </Badge>
+        <div className="bg-white rounded-lg border">
+          <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5 ">
+            <div className="flex items-center gap-x-3">
+              <GenrateAvatar
+                variant="botttsNeutral"
+                seed={data.name}
+                className="size-10"
+              />
+              <h2 className="text-2xl font-medium">{data.name}</h2>
+            </div>
 
-          <div className="flex flex-col gap-y-4 ">
-            <p className="font-medium text-lg">Instruction</p>
-            <p className="text-neutral-800">{data.instruction}</p>
+            <Badge
+              variant="outline"
+              className="flex items-center  gap-x-2 [&>svg]:size-4"
+            >
+              <VideoIcon className="text-blue-700" />
+              {data.meetingCount}{" "}
+              {data.meetingCount === 1 ? "meeting" : "meetings"}
+            </Badge>
+
+            <div className="flex flex-col gap-y-4 ">
+              <p className="font-medium text-lg">Instruction</p>
+              <p className="text-neutral-800">{data.instruction}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
-
-    
   );
 };
 
