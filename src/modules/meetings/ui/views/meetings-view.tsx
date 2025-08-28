@@ -11,7 +11,7 @@ export const MeetingView = ()=>{
 
     return(
         <div>
-           {JSON.stringify(data)};
+          
         </div>
     )
 }
