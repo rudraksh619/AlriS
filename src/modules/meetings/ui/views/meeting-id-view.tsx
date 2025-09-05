@@ -13,6 +13,10 @@ import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { UpdateMeetingDialog } from "../components/update-meeting-dialog copy";
 import { useState } from "react";
+import { UpcomingState } from "../components/upcoming-state";
+import { ActiveState } from "../components/active-state";
+import { CancelledState } from "../components/cancelled-state";
+import { Processingstate } from "../components/proccessing-state";
 
 interface Props {
   meetingId: string;
@@ -48,27 +52,29 @@ export const MeetingIdView = ({ meetingId }: Props) => {
   );
 
   const handleRemove = async () => {
-    const ok =  await  setConfirmation();
-    if(ok)
-    {
-      await  removeMeeting.mutateAsync({id:meetingId})
+    const ok = await setConfirmation();
+    if (ok) {
+      await removeMeeting.mutateAsync({ id: meetingId });
+    } else {
+      return;
     }
-    else
-    {
-        return ;
-    }
-  }
+  };
+
+  const isActive = data.status === "active";
+  const isCompleted = data.status === "completed";
+  const isUpcoming = data.status === "upcoming";
+  const isCancelled = data.status === "cancelled";
+  const isProcessing = data.status === "processing";
 
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
-        
-        <RemoveConfirmation/>
+        <RemoveConfirmation />
 
         <UpdateMeetingDialog
-        open={openUpdateMeetingDialog}
-        onOpenChange={setUpdateMeetingDialog}
-        initialValues={data}
+          open={openUpdateMeetingDialog}
+          onOpenChange={setUpdateMeetingDialog}
+          initialValues={data}
         />
 
         <MeetingIdHeader
@@ -78,7 +84,15 @@ export const MeetingIdView = ({ meetingId }: Props) => {
           onRemove={handleRemove}
         />
 
-       { JSON.stringify(data,null,3)};
+        {isCancelled && <CancelledState />}
+        {isCompleted && <p>This meeting has been completed.</p>}
+        {isUpcoming && <UpcomingState
+          meetingId={meetingId}
+          onCancellation={() => {}}
+          isCancelling={false}
+        />}
+        {isProcessing && <Processingstate/>}
+        {isActive && <ActiveState  meetingId= {meetingId}/>}
       </div>
     </>
   );
