@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { BanIcon, VideoIcon } from "lucide-react";
 import Link from "next/link";
 
+
 interface Props {
   meetingId: string;
   onCancellation: () => void;
@@ -34,7 +35,7 @@ export const UpcomingState = ({
         </Button>
 
         <Button disabled={isCancelling} asChild className="w-full lg:w-auto">
-          <Link href={`call/${meetingId}`}>
+          <Link href={`/call/${meetingId}`}>
             <VideoIcon />
             Start Meeting
           </Link>

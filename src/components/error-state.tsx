@@ -11,8 +11,8 @@ export const ErrorState = ({ title, description }: Props) => {
       <div className="flex flex-col items-center justify-center gap-y-6 bg-background rounded-lg p-10 shadow-sm">
         <AlertCircleIcon className="size-6 text-red-500 " />
         <div className="flex flex-col gap-y-2 text-center">
-          <p className="text-lg font-medium">{description}</p>
           <h6 className="text-sm">{title}</h6>
+           <p className="text-lg font-medium">{description}</p>
         </div>
       </div>
     </div>
