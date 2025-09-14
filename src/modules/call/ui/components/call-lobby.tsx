@@ -48,7 +48,8 @@ const AllowBrowserPermissions = () => {
   );
 };
 
-export const CallLoby = ({ onJoin }: Props) => {
+export const 
+CallLoby = ({ onJoin }: Props) => {
   const { useCameraState, useMicrophoneState } = useCallStateHooks();
   const { hasBrowserPermission: hasMicPermission } = useMicrophoneState();
   const { hasBrowserPermission: hasCameraPermission } = useCameraState();
